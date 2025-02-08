@@ -34,13 +34,24 @@ foreach ($suffix in $suffix_arraya)
     $rgName = "LAB-"+$suffix
 
 
+    Start-Sleep -second 10
+
+
     New-AzureADUser -DisplayName $DisplayName -PasswordProfile $PasswordProfile -UserPrincipalName $upn -AccountEnabled $true -MailNickName $mailnick
 
     Start-Sleep -second 15
 
+    write-host "User created: " $upn
+
     $user = Get-AzureADUser -ObjectId $upn     
-Y
+
     New-AzResourceGroup -Name $rgName -Location 'North Europe'
+
+    write-host "Resource Group created: " $rgName
+    Start-Sleep -second 15
+
     New-AzRoleAssignment -ObjectId $user.ObjectId -RoleDefinitionName "Owner" -ResourceGroupName "$rgName"
+
+    write-host "Role assigned: " $rgName
 
 }
